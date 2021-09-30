@@ -1,6 +1,0 @@
-C:\Projects\learning-projects\Secrets\bin\net5.0\publish\Secrets.exe
-C:\Projects\learning-projects\Secrets\bin\net5.0\publish\Secrets.dll
-C:\Projects\learning-projects\Secrets\bin\net5.0\publish\Secrets.deps.json
-C:\Projects\learning-projects\Secrets\bin\net5.0\publish\Secrets.runtimeconfig.json
-C:\Projects\learning-projects\Secrets\bin\net5.0\publish\Secrets.pdb
-C:\Projects\learning-projects\Secrets\bin\net5.0\publish\CommandLine.dll
