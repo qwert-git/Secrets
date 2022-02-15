@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Secrets.FileSystemIO;
+using Secrets.Cryptography;
 using Secrets.Services;
 
 namespace Secrets
@@ -10,6 +11,7 @@ namespace Secrets
 	internal static class Program
 	{
 		private static SymmetricDataEncryptor _encryptor;
+		private static SymmetricDataDecryptor _decryptor;
 		private static SingleRowSecretsParser _parser;
 
 		// TODO: Move consts to appsettings
@@ -22,17 +24,18 @@ namespace Secrets
 		public static async Task Main(string[] args)
 		{
 			_encryptor = new SymmetricDataEncryptor();
+			_decryptor = new SymmetricDataDecryptor();
 			_parser = new SingleRowSecretsParser(RowSeparator);
 
-			if (args.Length == 1 && args[0] == "new")
+			if (IsNewCommand(args))
 			{
 				await InitEncrypted();
 			}
 
-			var dataProvider = new FileDataProvider(EncryptedFilePath);
-			var encryptedSecrets = await dataProvider.ReadAsync();
+			var dataReader = new FileDataReader(EncryptedFilePath);
+			var encryptedSecrets = await dataReader.ReadAsync();
 			
-			var decryptedData = await _encryptor.DecryptAsync(EncryptKey,encryptedSecrets);
+			var decryptedData = await _decryptor.DecryptAsync(EncryptKey,encryptedSecrets);
 			var parsedSecrets = _parser.GetSecrets(decryptedData).ToArray();
 
 			ShowSecrets(args, parsedSecrets);
@@ -40,18 +43,23 @@ namespace Secrets
 
 		private static async Task InitEncrypted()
 		{
-			var originDataProvider = new FileDataProvider(FilePath);
-			var secretData = await originDataProvider.ReadAsync();
+			var originDataReader = new FileDataReader(FilePath);
+			var secretData = await originDataReader.ReadAsync();
 
 			var encryptedData = await _encryptor.EncryptAsync(EncryptKey, secretData);
 
-			var encryptedDataProvider = new FileDataProvider(EncryptedFilePath);
-			await encryptedDataProvider.WriteAsync(encryptedData);
+			var encryptedDataWriter = new FileDataWriter(EncryptedFilePath);
+			await encryptedDataWriter.WriteAsync(encryptedData);
 		}
-		
+
+		private static bool IsNewCommand(IReadOnlyList<string> args)
+		{
+			return args.Count == 1 && args[0] == "new";
+		}
+
 		private static void ShowSecrets(IReadOnlyList<string> args, IList<(string secretKey, string login, string pswrd)> parsedSecrets)
 		{
-			if (args.Count == 0)
+			if (args.Count == 0 || IsNewCommand(args))
 			{
 				for (var i = 0; i < parsedSecrets.Count; i++)
 					Console.WriteLine($"{i + 1}. {parsedSecrets[i].secretKey}");
@@ -59,7 +67,7 @@ namespace Secrets
 			else
 			{
 				var (secretKey, login, pswrd) = parsedSecrets[int.Parse(args[0]) - 1];
-				Console.WriteLine(secretKey is not null ? login + " " + pswrd : "Secret not found!");
+				Console.WriteLine(secretKey is not null ? $"{secretKey}: {login} {pswrd}" : "Secret not found!");
 			}
 		}
 	}

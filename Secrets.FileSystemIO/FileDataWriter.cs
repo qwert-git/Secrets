@@ -1,21 +1,16 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
+using Secrets.Core;
 
-namespace Secrets.Services
+namespace Secrets.FileSystemIO
 {
-	internal class FileDataProvider : IDataProvider
+	public class FileDataWriter : IDataWriter
 	{
 		private readonly string _filePath;
 
-		public FileDataProvider(string filePath)
+		public FileDataWriter(string filePath)
 		{
 			_filePath = filePath;
-		}
-
-		/// <inheritdoc />
-		public Task<string> ReadAsync()
-		{
-			return File.ReadAllTextAsync(_filePath);
 		}
 
 		/// <inheritdoc />
