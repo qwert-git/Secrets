@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using CommandLine;
+﻿using CommandLine;
 using Secrets.App.Caesar.Options;
 using Secrets.Cryptography;
 using Secrets.FileSystemIO;
@@ -11,7 +9,6 @@ await Parser.Default.ParseArguments<Options>(args)
 async Task ParseArgumentsHandler(Options options)
 {
 	var fileReader = new FileDataReader(options.InputFile);
-	var fileWriter = new FileDataWriter(options.OutputFile);
 
 	var inputData = await fileReader.ReadAsync();
 	string outputData;
@@ -34,11 +31,18 @@ async Task ParseArgumentsHandler(Options options)
 			throw new ArgumentOutOfRangeException();
 	}
 
-	await fileWriter.WriteAsync(outputData);
+	if(string.IsNullOrWhiteSpace(options.OutputFile))
+	{
+		Console.WriteLine("Output data: ");
+		Console.WriteLine("=================================== \n");
+		Console.ForegroundColor = ConsoleColor.Green;
+		Console.WriteLine(outputData);
+		Console.ForegroundColor = ConsoleColor.White;
+		Console.WriteLine("\n===================================");
+	}
+	else
+	{
+		var fileWriter = new FileDataWriter(options.OutputFile);
+		await fileWriter.WriteAsync(outputData);
+	}
 }
-
-// TODO:
-// 1. Add console output
-// 2. Remove output file parameter
-// 3. Add cli command of application
-// 4. Maybe. Add input source as clipboard 
