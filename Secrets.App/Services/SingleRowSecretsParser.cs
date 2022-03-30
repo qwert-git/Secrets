@@ -1,7 +1,14 @@
-﻿namespace Secrets.App.Services;
+﻿using Secrets.App.Models;
+
+namespace Secrets.App.Services;
 
 class SingleRowSecretsParser : ISecretsParser
 {
+	private const char RowSeparator = '\n';
+	private const int KeyRowIndex = 0;
+	private const int LoginRowIndex = 0;
+	private const int PasswordRowIndex = 0;
+
 	private readonly string _separator;
 
 	public SingleRowSecretsParser(string separator)
@@ -9,15 +16,22 @@ class SingleRowSecretsParser : ISecretsParser
 		_separator = separator;
 	}
 
-	public ICollection<(string secretKey, string login, string pswrd)> GetSecrets(string rawData)
+	public ICollection<Secret> GetSecrets(string rawData)
 	{
 		return rawData
-			.Split('\n')
-			.Select(row =>
-			{
-				var keyValuePair = row.Split(_separator);
-				return (keyValuePair[0], keyValuePair[1], keyValuePair[2]);
-			})
+			.Split(RowSeparator)
+			.Select(TransformToSecret)
 			.ToList();
+	}
+
+	private Secret TransformToSecret(string row)
+	{
+		var keyValuePair = row.Split(_separator);
+		return new Secret
+		{
+			Key = keyValuePair[KeyRowIndex],
+			Login = keyValuePair[LoginRowIndex],
+			Password = keyValuePair[PasswordRowIndex]
+		};
 	}
 }
