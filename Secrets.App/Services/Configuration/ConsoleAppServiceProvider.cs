@@ -1,9 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Secrets.Core;
-using Secrets.Services;
 using Secrets.Cryptography;
 
-namespace Secrets.App.ConfigurationServices;
+namespace Secrets.App.Services.Configuration;
 
 internal static class ConsoleAppServiceProvider
 {

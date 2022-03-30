@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace Secrets.App.ConfigurationServices;
+namespace Secrets.App.Services.Configuration;
 
 internal static class ConsoleAppConfigProvider
 {
