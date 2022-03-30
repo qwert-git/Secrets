@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Secrets;
 using Secrets.Core;
@@ -46,8 +42,10 @@ static ServiceProvider GetServiceProvider(AppConfig config)
 
 static AppConfig GetAppConfig()
 {
+	var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 	return new ConfigurationBuilder()
 		.AddJsonFile("appsettings.json")
+		.AddJsonFile($"appsettings.{env}.json")
 		.Build()
 		.Get<AppConfig>();
 }
