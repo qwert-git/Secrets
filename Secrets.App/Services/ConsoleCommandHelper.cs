@@ -1,3 +1,5 @@
+using Secrets.App.Models;
+
 namespace Secrets.App.Services;
 
 internal class ConsoleCommandTranslator
@@ -13,5 +15,7 @@ internal class ConsoleCommandTranslator
 
     public bool IsShowAllSecrets() => _args.Count == 0;
 
-    public int GetKeyNumber() => int.Parse(_args[0]) - 1;
+    public Secret GetSecret(IReadOnlyList<Secret> secrets) => secrets.ElementAtOrDefault(GetKeyNumber()); 
+
+    private int GetKeyNumber() => int.Parse(_args[0]) - 1;
 }
