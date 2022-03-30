@@ -2,11 +2,13 @@
 using Secrets;
 using Secrets.Core;
 using Secrets.FileSystemIO;
-using Secrets.Services;
-using Secrets.App.ConfigurationServices;
+using Secrets.App.Services;
+using Secrets.App.Services.Configuration;
+using Secrets.App.Services.Presenter;
 
 var config = ConsoleAppConfigProvider.GetConfig();
 var serviceProvider = ConsoleAppServiceProvider.GetServiceProvider(config);
+var commandTranslator = new ConsoleCommandTranslator(args);
 
 var encryptor = serviceProvider.GetService<IDataEncryptor>() ??
                  throw new ApplicationException($"Cannot find dependency for {nameof(IDataEncryptor)}");
@@ -15,7 +17,7 @@ var decryptor = serviceProvider.GetService<IDataDecryptor>() ??
 var parser = serviceProvider.GetService<ISecretsParser>() ??
               throw new ApplicationException($"Cannot find dependency for {nameof(ISecretsParser)}");
 
-if (IsNewCommand(args))
+if (commandTranslator.IsInitEncyrptionFile())
 {
 	await InitEncrypted(config);
 }
@@ -24,9 +26,17 @@ var dataReader = new FileDataReader(config.EncryptedFilePath);
 var encryptedSecrets = await dataReader.ReadAsync();
 
 var decryptedData = await decryptor.DecryptAsync(config.EncryptionKey, encryptedSecrets);
-var parsedSecrets = parser.GetSecrets(decryptedData).ToArray();
+var secrets = parser.GetSecrets(decryptedData).ToArray();
 
-ShowSecrets(args, parsedSecrets);
+if (commandTranslator.IsShowAllSecrets() || commandTranslator.IsInitEncyrptionFile())
+{
+	ConsolePresenter.PresentAllKeys(secrets);
+}
+else
+{
+	var secretToShow = commandTranslator.GetSecret(secrets);
+	ConsolePresenter.PresentSecret(secretToShow);
+}
 
 #region Application Methods
 async Task InitEncrypted(AppConfig config)
@@ -39,25 +49,4 @@ async Task InitEncrypted(AppConfig config)
 	var encryptedDataWriter = new FileDataWriter(config.EncryptedFilePath);
 	await encryptedDataWriter.WriteAsync(encryptedData);
 }
-
-static bool IsNewCommand(IReadOnlyList<string> args)
-{
-	return args.Count == 1 && args[0] == "new";
-}
-
-static void ShowSecrets(IReadOnlyList<string> args,
-	IList<(string secretKey, string login, string pswrd)> parsedSecrets)
-{
-	if (args.Count == 0 || IsNewCommand(args))
-	{
-		for (var i = 0; i < parsedSecrets.Count; i++)
-			Console.WriteLine($"{i + 1}. {parsedSecrets[i].secretKey}");
-	}
-	else
-	{
-		var (secretKey, login, pswrd) = parsedSecrets[int.Parse(args[0]) - 1];
-		Console.WriteLine(secretKey is not null ? $"{secretKey}: {login} {pswrd}" : "Secret not found!");
-	}
-}
-
 #endregion
