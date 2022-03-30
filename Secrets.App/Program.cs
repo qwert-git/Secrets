@@ -1,13 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Secrets;
 using Secrets.Core;
 using Secrets.FileSystemIO;
-using Secrets.Cryptography;
 using Secrets.Services;
+using Secrets.App.ConfigurationServices;
 
-var config = GetAppConfig();
-var serviceProvider = GetServiceProvider(config);
+var config = ConsoleAppConfigProvider.GetConfig();
+var serviceProvider = ConsoleAppServiceProvider.GetServiceProvider(config);
 
 var encryptor = serviceProvider.GetService<IDataEncryptor>() ??
                  throw new ApplicationException($"Cannot find dependency for {nameof(IDataEncryptor)}");
@@ -28,28 +27,6 @@ var decryptedData = await decryptor.DecryptAsync(config.EncryptionKey, encrypted
 var parsedSecrets = parser.GetSecrets(decryptedData).ToArray();
 
 ShowSecrets(args, parsedSecrets);
-
-#region Configuration Methods
-static ServiceProvider GetServiceProvider(AppConfig config)
-{
-	return new ServiceCollection()
-		.AddSingleton<IDataEncryptor, SymmetricDataEncryptor>()
-		.AddSingleton<IDataDecryptor, SymmetricDataDecryptor>()
-		.AddSingleton<ISecretsParser, SingleRowSecretsParser>(provider =>
-			new SingleRowSecretsParser(config.RowSeparator))
-		.BuildServiceProvider();
-}
-
-static AppConfig GetAppConfig()
-{
-	var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-	return new ConfigurationBuilder()
-		.AddJsonFile("appsettings.json")
-		.AddJsonFile($"appsettings.{env}.json")
-		.Build()
-		.Get<AppConfig>();
-}
-#endregion
 
 #region Application Methods
 async Task InitEncrypted(AppConfig config)
