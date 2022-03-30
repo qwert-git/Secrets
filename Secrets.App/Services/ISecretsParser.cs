@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+﻿namespace Secrets.App.Services;
 
-namespace Secrets.Services
+internal interface ISecretsParser
 {
-	public interface ISecretsParser
-	{
-		ICollection<(string secretKey, string login, string pswrd)> GetSecrets(string rawData);
-	}
+	ICollection<(string secretKey, string login, string pswrd)> GetSecrets(string rawData);
 }
