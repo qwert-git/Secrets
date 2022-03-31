@@ -13,6 +13,7 @@ internal static class ConsoleAppServiceProvider
             .AddSingleton<IDataEncryptor, SymmetricDataEncryptor>()
             .AddSingleton<IDataDecryptor, SymmetricDataDecryptor>()
             .AddSingleton<ISecretsParser, SingleRowSecretsParser>(provider => new SingleRowSecretsParser(config.RowSeparator))
+            .AddSingleton<SecretsProvider>()
             .BuildServiceProvider();
     }
 }
