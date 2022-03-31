@@ -6,8 +6,8 @@ class SingleRowSecretsParser : ISecretsParser
 {
 	private const char RowSeparator = '\n';
 	private const int KeyRowIndex = 0;
-	private const int LoginRowIndex = 0;
-	private const int PasswordRowIndex = 0;
+	private const int LoginRowIndex = 1;
+	private const int PasswordRowIndex = 2;
 
 	private readonly string _separator;
 
