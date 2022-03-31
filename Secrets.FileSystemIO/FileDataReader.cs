@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using Secrets.Core;
+﻿using Secrets.Core;
 
 namespace Secrets.FileSystemIO
 {
