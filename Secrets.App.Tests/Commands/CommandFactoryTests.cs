@@ -1,7 +1,10 @@
 using System;
+using AutoFixture;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Secrets.App.Commands;
+using Secrets.App.Models;
 using Secrets.App.Services;
 using Secrets.App.Services.Configuration;
 using Xunit;
@@ -56,5 +59,27 @@ public class CommandFactoryTests
 
         // Assert
         command.Should().BeOfType<ShowSecretCommand>();
+    }
+
+    [Fact]
+    public void AddSecretCommand_Should_ReturnCommandOfCorrectType()
+    {
+        // Arrange
+        var mockCommandTranslator = new Mock<ICommandTranslator>();
+        mockCommandTranslator
+            .Setup(commandTranslator => commandTranslator.IsAddNew())
+            .Returns(true);
+        mockCommandTranslator
+            .Setup(commandTranslator => commandTranslator.GetNewSecret())
+            .Returns(new Fixture().Create<Secret>());
+
+        var serviceProvider = ConsoleAppServiceProvider.GetServiceProvider(new AppConfig(), args: Array.Empty<string>());
+        var commandFactory = new CommandsFactory(serviceProvider, mockCommandTranslator.Object);
+
+        // Act
+        var command = commandFactory.Make();
+
+        // Assert
+        command.Should().BeOfType<AddSecretCommand>();
     }
 }

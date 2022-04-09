@@ -6,9 +6,9 @@ namespace Secrets.App.Commands;
 internal class CommandsFactory
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ConsoleCommandTranslator _commandTranslator;
+    private readonly ICommandTranslator _commandTranslator;
 
-    public CommandsFactory(IServiceProvider serviceProvider, ConsoleCommandTranslator commandTranslator)
+    public CommandsFactory(IServiceProvider serviceProvider, ICommandTranslator commandTranslator)
     {
         _serviceProvider = serviceProvider;
         _commandTranslator = commandTranslator;
@@ -24,6 +24,11 @@ internal class CommandsFactory
                     _commandTranslator.GetKeyNumber(),
                     _serviceProvider.GetRequiredService<SecretsProvider>(),
                     _serviceProvider.GetRequiredService<ConsolePresenter>());
+        }
+        else if(_commandTranslator.IsAddNew())
+        {
+            var secretToAdd = _commandTranslator.GetNewSecret();
+            return new AddSecretCommand(secretToAdd, _serviceProvider.GetRequiredService<SecretsProvider>());
         }
         else
             throw new InvalidOperationException("Undefiend command."); 
