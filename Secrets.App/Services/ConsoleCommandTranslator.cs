@@ -13,9 +13,11 @@ internal class ConsoleCommandTranslator
 
     public bool IsInitEncyrptionFile() => _args.Count == 1 && _args[0] == "new";
 
-    public bool IsShowAllSecrets() => _args.Count == 0;
+    public bool IsShowAllSecrets() => _args.Count == 0 || _args[0] == string.Empty;
 
     public Secret GetSecret(IReadOnlyList<Secret> secrets) => secrets.ElementAtOrDefault(GetKeyNumber()); 
 
-    private int GetKeyNumber() => int.Parse(_args[0]) - 1;
+    public bool IsGetSecret() => _args.Count > 0 && int.TryParse(_args[0], out _);
+
+    public int GetKeyNumber() => int.Parse(_args[0]) - 1;
 }
