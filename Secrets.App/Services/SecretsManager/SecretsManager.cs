@@ -41,7 +41,9 @@ internal class SecretsManager : ISecretsManager
 	{
 		var allSecrets = await GetAllAsync();
 
-		allSecrets.Remove(secretToRemove);
+		// TODO: It's better to optimize. Different Secrets objects in memory.  
+		var secretFromCollection = allSecrets.Find(s => s.Key == secretToRemove.Key);
+		allSecrets.Remove(secretFromCollection);
 
 		await _secretsWriter.WriteAsync(allSecrets);
 	}

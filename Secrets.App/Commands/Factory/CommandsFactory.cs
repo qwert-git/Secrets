@@ -24,7 +24,7 @@ internal class CommandsFactory
 		if (_commandTranslator.IsGetSecret())
 		{
 			return new ShowSecretCommand(
-				_commandTranslator.GetKeyNumber(),
+				_commandTranslator.GetAddKeyNumber(),
 				_serviceProvider.GetRequiredService<ISecretsManager>(),
 				_serviceProvider.GetRequiredService<ConsolePresenter>());
 		}
@@ -40,7 +40,7 @@ internal class CommandsFactory
 		if (_commandTranslator.IsRemove())
 		{
 			return new RemoveSecretCommand(
-				_commandTranslator.GetKeyNumber(),
+				_commandTranslator.GetRemoveKeyNumber(),
 				_serviceProvider.GetRequiredService<ISecretsManager>()
 			);
 		}

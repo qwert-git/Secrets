@@ -96,7 +96,7 @@ public class CommandFactoryTests
 			.Setup(commandTranslator => commandTranslator.IsRemove())
 			.Returns(true);
 		mockCommandTranslator
-			.Setup(commandTranslator => commandTranslator.GetKeyNumber())
+			.Setup(commandTranslator => commandTranslator.GetAddKeyNumber())
 			.Returns(It.IsAny<int>());
 
 		var serviceProvider =

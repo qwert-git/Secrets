@@ -4,7 +4,7 @@ namespace Secrets.Services.CommandTranslator;
 
 internal interface ICommandTranslator
 {
-    int GetKeyNumber();
+    int GetAddKeyNumber();
     Secret GetNewSecret();
     Secret GetSecret(IReadOnlyList<Secret> secrets);
     bool IsAddNew();
@@ -12,4 +12,5 @@ internal interface ICommandTranslator
     bool IsInitEncryptionFile();
     bool IsShowAllSecrets();
     bool IsRemove();
+    int GetRemoveKeyNumber();
 }

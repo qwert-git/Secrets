@@ -16,13 +16,15 @@ internal class ConsoleCommandTranslator : ICommandTranslator
     public bool IsShowAllSecrets() => _args.Count == 0 || _args[0] == string.Empty;
 
     /// <inheritdoc />
-    public bool IsRemove() => _args.Count == 2 && (_args[0] == "rm" || _args[0] == "remove");
+    public bool IsRemove() => _args.Count == 2 && (_args[0] == "rm" || _args[0] == "remove") && int.TryParse(_args[1], out _);
 
-    public Secret GetSecret(IReadOnlyList<Secret> secrets) => secrets.ElementAtOrDefault(GetKeyNumber());
+    public Secret GetSecret(IReadOnlyList<Secret> secrets) => secrets.ElementAtOrDefault(GetAddKeyNumber());
 
     public bool IsGetSecret() => _args.Count > 0 && int.TryParse(_args[0], out _);
 
-    public int GetKeyNumber() => int.Parse(_args[0]) - 1;
+    public int GetAddKeyNumber() => int.Parse(_args[0]) - 1;
+    
+    public int GetRemoveKeyNumber() => int.Parse(_args[1]) - 1;
 
     public bool IsAddNew() => _args.Count > 0 && _args[0] == "add";
 

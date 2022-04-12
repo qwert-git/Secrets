@@ -83,6 +83,8 @@ public class ConsoleCommandTranslatorTests
 	[InlineData(new[] { "remove" }, false)]
 	[InlineData(new[] { "1", "rm" }, false)]
 	[InlineData(new[] { "1", "remove" }, false)]
+	[InlineData(new[] { "rm", "1" }, true)]
+	[InlineData(new[] { "remove", "1" }, true)]
 	public void RemoveCommand_CommandName_Should_ReturnExpectedResult(string[] args, bool expectedResult)
 	{
 		// Arrange
@@ -104,7 +106,7 @@ public class ConsoleCommandTranslatorTests
 		var translator = new ConsoleCommandTranslator(args);
 
 		// Act
-		var result = translator.GetKeyNumber();
+		var result = translator.GetAddKeyNumber();
 
 		// Assert
 		result.Should().Be(testKeyNumber - 1);
