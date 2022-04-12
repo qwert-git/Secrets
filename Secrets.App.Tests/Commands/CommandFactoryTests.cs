@@ -7,6 +7,7 @@ using Secrets.App.Commands;
 using Secrets.App.Models;
 using Secrets.App.Services;
 using Secrets.App.Services.Configuration;
+using Secrets.Commands;
 using Xunit;
 
 namespace Secrets.App.Tests.Commands;

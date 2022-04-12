@@ -1,8 +1,11 @@
 using Microsoft.Extensions.DependencyInjection;
+using Secrets.App.Commands;
 using Secrets.App.Services;
 using Secrets.App.Services.Presenter;
+using Secrets.Services.SecretsManager;
 
-namespace Secrets.App.Commands;
+namespace Secrets.Commands;
+
 internal class CommandsFactory
 {
     private readonly IServiceProvider _serviceProvider;
@@ -22,13 +25,13 @@ internal class CommandsFactory
         {
             return new ShowSecretCommand(
                     _commandTranslator.GetKeyNumber(),
-                    _serviceProvider.GetRequiredService<SecretsProvider>(),
+                    _serviceProvider.GetRequiredService<SecretsManager>(),
                     _serviceProvider.GetRequiredService<ConsolePresenter>());
         }
         else if(_commandTranslator.IsAddNew())
         {
             var secretToAdd = _commandTranslator.GetNewSecret();
-            return new AddSecretCommand(secretToAdd, _serviceProvider.GetRequiredService<SecretsProvider>());
+            return new AddSecretCommand(secretToAdd, _serviceProvider.GetRequiredService<SecretsManager>());
         }
         else
             throw new InvalidOperationException("Undefiend command."); 

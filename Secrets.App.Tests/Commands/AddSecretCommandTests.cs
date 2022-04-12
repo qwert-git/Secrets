@@ -5,16 +5,18 @@ using Moq;
 using Secrets.App.Commands;
 using Secrets.App.Models;
 using Secrets.App.Services;
+using Secrets.Services.SecretsManager;
+using Secrets.Services.SecretsProvider;
 using Xunit;
 
 namespace Secrets.App.Tests.Commands;
 public class AddSecretCommandTests
 {
-    private readonly Mock<ISecretsProvider> _mockSecretsProvider;
+    private readonly Mock<ISecretsManager> _mockSecretsProvider;
 
     public AddSecretCommandTests()
     {
-        _mockSecretsProvider = new Mock<ISecretsProvider>();
+        _mockSecretsProvider = new Mock<ISecretsManager>();
     }
 
     [Fact]

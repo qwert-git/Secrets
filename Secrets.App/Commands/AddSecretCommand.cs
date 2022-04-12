@@ -1,20 +1,22 @@
 using Secrets.App.Models;
 using Secrets.App.Services;
+using Secrets.Services.SecretsManager;
+using Secrets.Services.SecretsProvider;
 
 namespace Secrets.App.Commands;
 internal class AddSecretCommand : ICommand
 {
     private readonly Secret _secretToAdd;
-    private readonly ISecretsProvider _secretsProvider;
+    private readonly ISecretsManager _secretsManager;
 
-    public AddSecretCommand(Secret secretToAdd, ISecretsProvider secretsProvider)
+    public AddSecretCommand(Secret secretToAdd, ISecretsManager secretsManager)
     {
         _secretToAdd = secretToAdd ?? throw new ArgumentNullException(nameof(secretToAdd));
-        _secretsProvider = secretsProvider;
+        _secretsManager = secretsManager;
     }
 
     public Task ExecuteAsync()
     {
-        return _secretsProvider.AddAsync(_secretToAdd);
+        return _secretsManager.AddAsync(_secretToAdd);
     }
 }

@@ -1,11 +1,12 @@
 using System.Text;
 using Secrets.App.Models;
+using Secrets.App.Services;
 
-namespace Secrets.App.Services;
+namespace Secrets.Services.SecretsConverter;
 
 internal class SecretsToPlainTextDataConverter : ISecretsToRawDataConverter
 {
-    public string GetRaw(ICollection<Secret> secrets)
+    public string GetRaw(IEnumerable<Secret> secrets)
     {
         var sb = new StringBuilder();
         foreach(var secret in secrets)

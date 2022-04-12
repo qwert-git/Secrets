@@ -1,8 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
-using Secrets.App.Commands;
 using Secrets.App.Services.Presenter;
+using Secrets.Commands;
 using Secrets.Core;
 using Secrets.Cryptography;
+using Secrets.Services.SecretsConverter;
+using Secrets.Services.SecretsManager;
 
 namespace Secrets.App.Services.Configuration;
 
@@ -15,7 +17,7 @@ internal static class ConsoleAppServiceProvider
             .AddSingleton<IDataEncryptor, SymmetricDataEncryptor>()
             .AddSingleton<IDataDecryptor, SymmetricDataDecryptor>()
             .AddSingleton<ISecretsParser, SingleRowSecretsParser>(provider => new SingleRowSecretsParser(config.RowSeparator))
-            .AddSingleton<SecretsProvider>()
+            .AddSingleton<SecretsManager>()
             .AddSingleton<ISecretsToRawDataConverter, SecretsToPlainTextDataConverter>()
             .AddSingleton<ICommandTranslator>(provider => new ConsoleCommandTranslator(args))
             .AddSingleton<ConsolePresenter>()

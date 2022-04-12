@@ -1,22 +1,23 @@
-using Secrets.App.Services;
+using Secrets.App.Commands;
 using Secrets.App.Services.Presenter;
+using Secrets.Services.SecretsManager;
 
-namespace Secrets.App.Commands;
+namespace Secrets.Commands;
 
 internal class ShowAllSecretsCommand : ICommand
 {
-    private readonly SecretsProvider _secretsProvider;
+    private readonly SecretsManager _secretsManager;
     private readonly ConsolePresenter _presenter;
 
-    public ShowAllSecretsCommand(SecretsProvider secretsProver, ConsolePresenter presenter)
+    public ShowAllSecretsCommand(SecretsManager secretsProver, ConsolePresenter presenter)
     {
-        _secretsProvider = secretsProver;
+        _secretsManager = secretsProver;
         _presenter = presenter;
     }
 
     public async Task ExecuteAsync()
     {
-        var secrets = await _secretsProvider.GetAllAsync();
+        var secrets = await _secretsManager.GetAllAsync();
         _presenter.PresentAllKeys(secrets);
     }
 }

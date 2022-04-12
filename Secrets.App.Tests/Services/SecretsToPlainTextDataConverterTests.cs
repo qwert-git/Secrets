@@ -2,6 +2,7 @@ using AutoFixture;
 using FluentAssertions;
 using Secrets.App.Models;
 using Secrets.App.Services;
+using Secrets.Services.SecretsConverter;
 using Xunit;
 
 namespace Secrets.App.Tests.Services;
