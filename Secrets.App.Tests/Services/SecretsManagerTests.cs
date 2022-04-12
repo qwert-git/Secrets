@@ -17,10 +17,14 @@ public class SecretsProviderTests
 	public async Task RemoveSecret_Should_Be_NoSecretInSavingCollection()
 	{
 		// Assert
-		var secrets = new Fixture().CreateMany<Secret>();
+		var secrets = new Fixture().CreateMany<Secret>().ToList();
 		var secretToRemove = secrets.Last();
 
 		var mockSecretsReader = new Mock<ISecretsReader>();
+		mockSecretsReader
+			.Setup(reader => reader.ReadSecretsAsync())
+			.ReturnsAsync(secrets);
+		
 		var mockSecretsWriter = new Mock<ISecretsWriter>();
 
 		var secretsProvider = new SecretsManager(mockSecretsReader.Object, mockSecretsWriter.Object);

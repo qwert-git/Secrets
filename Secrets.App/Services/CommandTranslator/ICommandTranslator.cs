@@ -1,6 +1,6 @@
 using Secrets.App.Models;
 
-namespace Secrets.App.Services;
+namespace Secrets.Services.CommandTranslator;
 
 internal interface ICommandTranslator
 {
@@ -9,6 +9,7 @@ internal interface ICommandTranslator
     Secret GetSecret(IReadOnlyList<Secret> secrets);
     bool IsAddNew();
     bool IsGetSecret();
-    bool IsInitEncyrptionFile();
+    bool IsInitEncryptionFile();
     bool IsShowAllSecrets();
+    bool IsRemove();
 }

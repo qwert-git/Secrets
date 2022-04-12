@@ -1,6 +1,6 @@
 using Secrets.App.Models;
 
-namespace Secrets.App.Services;
+namespace Secrets.Services.CommandTranslator;
 
 internal class ConsoleCommandTranslator : ICommandTranslator
 {
@@ -11,9 +11,12 @@ internal class ConsoleCommandTranslator : ICommandTranslator
         _args = args;
     }
 
-    public bool IsInitEncyrptionFile() => _args.Count == 1 && _args[0] == "new";
+    public bool IsInitEncryptionFile() => _args.Count == 1 && _args[0] == "new";
 
     public bool IsShowAllSecrets() => _args.Count == 0 || _args[0] == string.Empty;
+
+    /// <inheritdoc />
+    public bool IsRemove() => _args.Count == 2 && (_args[0] == "rm" || _args[0] == "remove");
 
     public Secret GetSecret(IReadOnlyList<Secret> secrets) => secrets.ElementAtOrDefault(GetKeyNumber());
 

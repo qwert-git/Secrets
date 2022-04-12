@@ -1,27 +1,48 @@
 using Microsoft.Extensions.DependencyInjection;
+using Secrets.App.Services;
 using Secrets.App.Services.Presenter;
 using Secrets.Commands;
 using Secrets.Core;
 using Secrets.Cryptography;
+using Secrets.FileSystemIO;
+using Secrets.Services.CommandTranslator;
 using Secrets.Services.SecretsConverter;
 using Secrets.Services.SecretsManager;
+using Secrets.Services.SecretsManager.SecretsReader;
+using Secrets.Services.SecretsManager.SecretsWriter;
 
-namespace Secrets.App.Services.Configuration;
+namespace Secrets.Services.Configuration;
 
 internal static class ConsoleAppServiceProvider
 {
     public static ServiceProvider GetServiceProvider(AppConfig config, IReadOnlyList<string> args)
     {
         return new ServiceCollection()
-            .AddSingleton<AppConfig>(config)
-            .AddSingleton<IDataEncryptor, SymmetricDataEncryptor>()
-            .AddSingleton<IDataDecryptor, SymmetricDataDecryptor>()
-            .AddSingleton<ISecretsParser, SingleRowSecretsParser>(provider => new SingleRowSecretsParser(config.RowSeparator))
-            .AddSingleton<SecretsManager>()
-            .AddSingleton<ISecretsToRawDataConverter, SecretsToPlainTextDataConverter>()
-            .AddSingleton<ICommandTranslator>(provider => new ConsoleCommandTranslator(args))
+            .AddSingleton(config)
+            .AddSecretsReader(config)
+            .AddSecretsWriter(config)
+            .AddSingleton<ISecretsManager, SecretsManager.SecretsManager>()
+            .AddSingleton<ICommandTranslator>(_ => new ConsoleCommandTranslator(args))
             .AddSingleton<ConsolePresenter>()
             .AddSingleton<ShowAllSecretsCommand>()
             .BuildServiceProvider();
+    }
+
+    private static IServiceCollection AddSecretsReader(this IServiceCollection services, AppConfig config)
+    {
+        return services
+            .AddSingleton<IDataReader>(_ => new FileDataReader(config.EncryptedFilePath))
+            .AddSingleton<IDataDecryptor, SymmetricDataDecryptor>()
+            .AddSingleton<ISecretsParser, SingleRowSecretsParser>(_ => new SingleRowSecretsParser(config.RowSeparator))
+            .AddSingleton<ISecretsReader, SecretsReader>();
+    }
+    
+    private static IServiceCollection AddSecretsWriter(this IServiceCollection services, AppConfig config)
+    {
+        return services
+            .AddSingleton<IDataWriter>(_ => new FileDataWriter(config.EncryptedFilePath))
+            .AddSingleton<IDataEncryptor, SymmetricDataEncryptor>()
+            .AddSingleton<ISecretsToRawDataConverter, SecretsToPlainTextDataConverter>()
+            .AddSingleton<ISecretsWriter, SecretsWriter>();
     }
 }

@@ -1,9 +1,9 @@
+using Secrets.App.Commands;
 using Secrets.App.Models;
-using Secrets.App.Services;
 using Secrets.Services.SecretsManager;
-using Secrets.Services.SecretsProvider;
 
-namespace Secrets.App.Commands;
+namespace Secrets.Commands;
+
 internal class AddSecretCommand : ICommand
 {
     private readonly Secret _secretToAdd;

@@ -7,10 +7,10 @@ namespace Secrets.Commands;
 internal class ShowSecretCommand : ICommand
 {
     private readonly int _secretNumber;
-    private readonly SecretsManager _secretsManager;
+    private readonly ISecretsManager _secretsManager;
     private readonly ConsolePresenter _presenter;
 
-    public ShowSecretCommand(int secretNumber, SecretsManager secretsManager, ConsolePresenter presenter)
+    public ShowSecretCommand(int secretNumber, ISecretsManager secretsManager, ConsolePresenter presenter)
     {
         this._secretNumber = secretNumber;
         _secretsManager = secretsManager;
