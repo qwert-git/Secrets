@@ -2,8 +2,6 @@
 {
 	public class AppConfig
 	{
-		public string OriginFilePath { get; set; }
-
 		public string EncryptedFilePath { get; set; }
 
 		public string EncryptionKey { get; set; }

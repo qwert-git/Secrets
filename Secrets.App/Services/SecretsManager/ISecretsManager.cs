@@ -8,7 +8,5 @@ internal interface ISecretsManager
 
 	Task AddAsync(Secret secretToAdd);
 
-	Task InitEncryptedAsync();
-
 	Task RemoveSecretAsync(Secret secretToRemove);
 }

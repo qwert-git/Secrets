@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Secrets.App.Models;
 using Secrets.Services.SecretsManager.SecretsReader;
 using Secrets.Services.SecretsManager.SecretsWriter;
@@ -20,12 +19,6 @@ internal class SecretsManager : ISecretsManager
 	{
 		var allSecrets = await _secretsReader.ReadSecretsAsync();
 		return allSecrets.ToList();
-	}
-
-	public async Task InitEncryptedAsync()
-	{
-		var allSecrets = await _secretsReader.ReadSecretsAsync();
-		await _secretsWriter.WriteAsync(allSecrets.ToImmutableArray());
 	}
 
 	public async Task AddAsync(Secret secretToAdd)

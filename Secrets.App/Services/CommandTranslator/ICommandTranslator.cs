@@ -9,7 +9,6 @@ internal interface ICommandTranslator
     Secret GetSecret(IReadOnlyList<Secret> secrets);
     bool IsAddNew();
     bool IsGetSecret();
-    bool IsInitEncryptionFile();
     bool IsShowAllSecrets();
     bool IsRemove();
     int GetRemoveKeyNumber();

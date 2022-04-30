@@ -14,10 +14,5 @@ var secretsProvider = serviceProvider.GetService<ISecretsManager>() ??
 var commandsFactory = new CommandsFactory(serviceProvider, commandTranslator);
 
 
-if (commandTranslator.IsInitEncryptionFile())
-{
-	await secretsProvider.InitEncryptedAsync();
-}
-
 var command = commandsFactory.Make();
 await command.ExecuteAsync();
