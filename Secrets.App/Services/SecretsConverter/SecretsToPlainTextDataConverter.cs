@@ -1,6 +1,5 @@
 using System.Text;
 using Secrets.App.Models;
-using Secrets.App.Services;
 
 namespace Secrets.Services.SecretsConverter;
 

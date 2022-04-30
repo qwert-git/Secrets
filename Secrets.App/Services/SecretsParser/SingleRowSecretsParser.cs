@@ -1,4 +1,5 @@
-﻿using Secrets.App.Models;
+﻿using Secrets.App.Exceptions;
+using Secrets.App.Models;
 
 namespace Secrets.App.Services;
 
@@ -25,13 +26,25 @@ class SingleRowSecretsParser : ISecretsParser
 	}
 
 	private Secret TransformToSecret(string row)
-	{
-		var keyValuePair = row.Split(_separator);
-		return new Secret
+    {
+		try
 		{
-			Key = keyValuePair[KeyRowIndex],
-			Login = keyValuePair[LoginRowIndex],
-			Password = keyValuePair[PasswordRowIndex]
-		};
-	}
+			return ToSecret(row);
+		}
+		catch(Exception ex)
+		{
+			throw new SecretsAppException($"Wrong secrets raw data. Converting from the raw format failed with message `{ex.Message}`");
+		}
+    }
+
+    private Secret ToSecret(string row)
+    {
+        var keyValuePair = row.Split(_separator);
+        return new Secret
+        {
+            Key = keyValuePair[KeyRowIndex],
+            Login = keyValuePair[LoginRowIndex],
+            Password = keyValuePair[PasswordRowIndex]
+        };
+    }
 }

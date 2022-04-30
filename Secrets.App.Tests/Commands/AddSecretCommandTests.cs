@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using Moq;
+using Secrets.App.Exceptions;
 using Secrets.App.Models;
 using Secrets.Commands;
 using Secrets.Services.SecretsManager;
@@ -19,13 +20,13 @@ public class AddSecretCommandTests
 	}
 
 	[Fact]
-	public void SecretToAdd_IsNull_Should_ThrowArgumentNullException()
+	public void SecretToAdd_IsNull_Should_ThrowException()
 	{
 		// Arrange
 		var secretToAdd = null as Secret;
 
 		// Assert
-		Assert.Throws<ArgumentNullException>(() => new AddSecretCommand(secretToAdd, _mockSecretsProvider.Object));
+		Assert.Throws<SecretsAppException>(() => new AddSecretCommand(secretToAdd, _mockSecretsProvider.Object));
 	}
 
 	[Fact]

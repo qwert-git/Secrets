@@ -3,6 +3,7 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Secrets.App.Exceptions;
 using Secrets.App.Models;
 using Secrets.App.Services.Configuration;
 using Secrets.Commands;
@@ -23,14 +24,14 @@ public class CommandFactoryTests
 	}
 
 	[Fact]
-	public void CommandTypeDoesNotExists_Should_ThrowArgumentException()
+	public void CommandTypeDoesNotExists_Should_ThrowException()
 	{
 		// Arrange
 		var args = new[] { "NotExistsCommand" };
 		var commandFactory = new CommandsFactory(_serviceProvider, new ConsoleCommandTranslator(args));
 
 		// Assert
-		Assert.Throws<InvalidOperationException>(() => commandFactory.Make());
+		Assert.Throws<SecretsAppException>(() => commandFactory.Make());
 	}
 
 	[Fact]

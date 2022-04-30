@@ -1,3 +1,4 @@
+using Secrets.App.Exceptions;
 using Secrets.App.Models;
 
 namespace Secrets.Services.CommandTranslator;
@@ -33,7 +34,7 @@ internal class ConsoleCommandTranslator : ICommandTranslator
         const int PasswordArgsIndex = 3;
 
         if (_args.Count < 4)
-            return null;
+            throw new SecretsAppException("Creation of new secret faild. There are lack of arguments.");
         return new()
         {
             Key = _args[KeyArgsIndex],

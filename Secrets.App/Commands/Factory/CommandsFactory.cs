@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Secrets.App.Commands;
+using Secrets.App.Exceptions;
 using Secrets.App.Services.Presenter;
 using Secrets.Services.CommandTranslator;
 using Secrets.Services.SecretsManager;
@@ -45,6 +46,6 @@ internal class CommandsFactory
 			);
 		}
 
-		throw new InvalidOperationException("Undefined command.");
+		throw new SecretsAppException("Undefined command.");
 	}
 }

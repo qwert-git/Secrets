@@ -1,4 +1,5 @@
 using Secrets.App.Commands;
+using Secrets.App.Exceptions;
 using Secrets.App.Models;
 using Secrets.Services.SecretsManager;
 
@@ -11,7 +12,7 @@ internal class AddSecretCommand : ICommand
 
     public AddSecretCommand(Secret secretToAdd, ISecretsManager secretsManager)
     {
-        _secretToAdd = secretToAdd ?? throw new ArgumentNullException(nameof(secretToAdd));
+        _secretToAdd = secretToAdd ?? throw new SecretsAppException("Secret to add is null.");
         _secretsManager = secretsManager;
     }
 

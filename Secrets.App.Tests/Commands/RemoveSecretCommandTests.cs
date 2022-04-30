@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using Moq;
+using Secrets.App.Exceptions;
 using Secrets.App.Models;
 using Secrets.Commands;
 using Secrets.Services.SecretsManager;
@@ -15,7 +15,7 @@ public class RemoveSecretCommandTests
 	[Theory]
 	[InlineData(-1)]
 	[InlineData(99999)]
-	public async Task SecretNumberOurOfRange_Should_ThrowArgumentException(int secretToRemoveNumber)
+	public async Task SecretNumberOurOfRange_Should_ThrowException(int secretToRemoveNumber)
 	{
 		// Arrange
 		var secrets = new Fixture().CreateMany<Secret>().ToList();
@@ -28,7 +28,7 @@ public class RemoveSecretCommandTests
 		var command = new RemoveSecretCommand(secretToRemoveNumber, mockSecretsManager.Object);
 
 		// Assert
-		await Assert.ThrowsAsync<ArgumentException>(() => command.ExecuteAsync());
+		await Assert.ThrowsAsync<SecretsAppException>(() => command.ExecuteAsync());
 	}
 	
 	[Fact]

@@ -1,5 +1,6 @@
 using System;
 using FluentAssertions;
+using Secrets.App.Exceptions;
 using Secrets.Services.CommandTranslator;
 using Xunit;
 
@@ -43,16 +44,13 @@ public class ConsoleCommandTranslatorTests
 	[InlineData(new string[] { "add" }, false)]
 	[InlineData(new string[] { "add", "key_name" }, false)]
 	[InlineData(new string[] { "add", "key_name", "login" }, false)]
-	public void GetNewSecret_NoArguments_Should_ReturnNull(string[] args, bool _)
+	public void GetNewSecret_NoArguments_Should_ThrowException(string[] args, bool _)
 	{
 		// Arrange
 		var translator = new ConsoleCommandTranslator(args);
 
-		// Act
-		var result = translator.GetNewSecret();
-
 		// Assert
-		result.Should().BeNull();
+		Assert.Throws<SecretsAppException>(() => translator.GetNewSecret());
 	}
 
 	[Fact]
