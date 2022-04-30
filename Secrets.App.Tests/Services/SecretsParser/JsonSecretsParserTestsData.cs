@@ -25,4 +25,22 @@ public partial class JsonSecretsParserTests
         {
             new object[] { CustomJsonConverter.Serialize(new Fixture().CreateMany<Secret>()) }
         };
+
+    public static IEnumerable<object[]> ValidSecretsJsonWithExpectedTestData
+    {
+        get
+        {
+            var testCollection = new Fixture().CreateMany<Secret>();
+
+            return new List<object[]>
+            {
+                new object[] 
+                { 
+                    CustomJsonConverter.Serialize(testCollection),
+                    testCollection
+                }
+            };
+        }
+    }
+
 }
