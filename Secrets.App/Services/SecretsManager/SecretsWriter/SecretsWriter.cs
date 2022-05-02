@@ -1,6 +1,5 @@
 ﻿using Secrets.App.Models;
 using Secrets.Core;
-using Secrets.FileSystemIO;
 using Secrets.Services.SecretsConverter;
 
 namespace Secrets.Services.SecretsManager.SecretsWriter;
@@ -27,7 +26,6 @@ internal class SecretsWriter : ISecretsWriter
 
 		var encryptedData = await _encryptor.EncryptAsync(_config.EncryptionKey, rawData);
 
-		var encryptedDataWriter = new FileDataWriter(_config.EncryptedFilePath);
-		await encryptedDataWriter.WriteAsync(encryptedData);
+		await _dataWriter.WriteAsync(encryptedData);
 	}
 }
