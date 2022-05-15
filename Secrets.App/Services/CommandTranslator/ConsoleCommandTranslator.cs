@@ -42,4 +42,6 @@ internal class ConsoleCommandTranslator : ICommandTranslator
             Password = _args[PasswordArgsIndex]
         };
     }
+
+    public bool IsInit() => _args.Count == 1 && _args[0] == "init";
 }

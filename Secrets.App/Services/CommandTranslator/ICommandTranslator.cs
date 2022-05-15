@@ -12,4 +12,5 @@ internal interface ICommandTranslator
     bool IsShowAllSecrets();
     bool IsRemove();
     int GetRemoveKeyNumber();
+    bool IsInit();
 }

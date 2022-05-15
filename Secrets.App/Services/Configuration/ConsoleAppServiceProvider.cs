@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Secrets.App.Commands;
 using Secrets.App.Services;
 using Secrets.App.Services.Presenter;
 using Secrets.App.Services.SecretsParser;
@@ -27,8 +28,15 @@ internal static class ConsoleAppServiceProvider
             .AddSingleton<ISecretsManager, SecretsManager.SecretsManager>()
             .AddSingleton<ICommandTranslator>(_ => new ConsoleCommandTranslator(args))
             .AddSingleton<ConsolePresenter>()
-            .AddSingleton<ShowAllSecretsCommand>()
+            .AddCommands()
             .BuildServiceProvider();
+    }
+
+    private static IServiceCollection AddCommands(this IServiceCollection services)
+    {
+        return services
+            .AddSingleton<ShowAllSecretsCommand>()
+            .AddSingleton<InitCommand>();
     }
 
     private static IServiceCollection AddSecretsReader(this IServiceCollection services, string encryptedFileName)

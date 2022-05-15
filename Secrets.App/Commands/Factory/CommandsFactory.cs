@@ -20,6 +20,8 @@ internal class CommandsFactory
 
 	public ICommand Make()
 	{
+		if(_commandTranslator.IsInit())
+			return _serviceProvider.GetService<InitCommand>();
 		if (_commandTranslator.IsShowAllSecrets())
 			return _serviceProvider.GetService<ShowAllSecretsCommand>();
 		if (_commandTranslator.IsGetSecret())
