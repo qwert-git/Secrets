@@ -18,4 +18,5 @@ TODO Next:
 1. Refactor the cryptography project logic to make setup possible 
 2. Refactor the getting default storage file logic, rid of hardcode in several places
 3. Add 'help' command
-4. Extend the project documentation
+4. Make the secrets token generation with init command
+5. Extend the project documentation
